@@ -1,4 +1,5 @@
 ﻿using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
 using System;
 using System.Reflection;
 
@@ -31,19 +32,33 @@ namespace gltf.tooling
         private static void Info(string file)
         {
             Console.WriteLine("File: " + file);
-            var model = ModelRoot.Load(file);
-            Console.WriteLine("Generator: " + model.Asset.Generator);
-            Console.WriteLine("Version: " + model.Asset.Version);
 
-            foreach(var mesh in model.LogicalMeshes)
+            try
             {
-                foreach(var primitive in mesh.Primitives)
+                var model = ModelRoot.Load(file);
+                Console.WriteLine("Generator: " + model.Asset.Generator);
+                Console.WriteLine("Version: " + model.Asset.Version);
+
+                HandleModel(model);
+            }
+            catch(LinkException e)
+            {
+                Console.WriteLine("Error loading model: " + e.Message);
+            }
+
+        }
+
+        private static void HandleModel(ModelRoot model)
+        {
+            foreach (var mesh in model.LogicalMeshes)
+            {
+                foreach (var primitive in mesh.Primitives)
                 {
                     Console.WriteLine("Primitive type: " + primitive.DrawPrimitiveType);
 
                     Console.WriteLine("Vertex accessors: " + String.Join(',', primitive.VertexAccessors.Keys));
 
-                    foreach(var vertexAccessor in primitive.VertexAccessors)
+                    foreach (var vertexAccessor in primitive.VertexAccessors)
                     {
                         var va = primitive.GetVertexAccessor(vertexAccessor.Key);
                         Console.WriteLine("Vertex accessor: " + vertexAccessor.Key);
@@ -51,15 +66,15 @@ namespace gltf.tooling
                         if (vertexAccessor.Key == "POSITION" || vertexAccessor.Key == "NORMAL")
                         {
                             var vectors = va.AsVector3Array();
-                            foreach(var v in vectors)
+                            foreach (var v in vectors)
                             {
-                                Console.WriteLine(v.X + ", "+ v.Y + ", "+ v.Z);
+                                Console.WriteLine(v.X + ", " + v.Y + ", " + v.Z);
                             }
                         }
                         else if (vertexAccessor.Key == "COLOR_0")
                         {
                             var colors = va.AsColorArray();
-                            foreach(var c in colors)
+                            foreach (var c in colors)
                             {
                                 Console.WriteLine($"{c.X},{c.Y}, {c.Z}, {c.W}");
                             }
@@ -68,13 +83,14 @@ namespace gltf.tooling
                         {
                             Console.WriteLine("texcoord_0");
                             var texcoords = va.AsVector2Array();
-                            foreach(var texcoord in texcoords)
+                            foreach (var texcoord in texcoords)
                             {
                                 Console.WriteLine(texcoord.X + ", " + texcoord.Y);
                             }
                         }
 
-                        else if (vertexAccessor.Key.StartsWith("_")){
+                        else if (vertexAccessor.Key.StartsWith("_"))
+                        {
                             // custom attribute
                             var scalars = va.AsScalarArray();
                             foreach (var s in scalars)
