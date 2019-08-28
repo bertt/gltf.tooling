@@ -50,13 +50,21 @@ namespace gltf.tooling
 
         private static void HandleModel(ModelRoot model)
         {
+            Console.WriteLine("Number of meshes: " + model.LogicalMeshes.Count);
             foreach (var mesh in model.LogicalMeshes)
             {
+                Console.WriteLine("Number of primitives: " + mesh.Primitives.Count);
                 foreach (var primitive in mesh.Primitives)
                 {
                     Console.WriteLine("Primitive type: " + primitive.DrawPrimitiveType);
 
+                    var indexaccessor = primitive.IndexAccessor;
                     Console.WriteLine("Vertex accessors: " + String.Join(',', primitive.VertexAccessors.Keys));
+
+                    if (primitive.VertexAccessors.Count > 0)
+                    {
+                        Console.WriteLine("Number of triangles: " + primitive.GetVertexAccessor("POSITION").AsVector3Array().Count / 3);
+                    }
 
                     foreach (var vertexAccessor in primitive.VertexAccessors)
                     {
