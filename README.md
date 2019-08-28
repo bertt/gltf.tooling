@@ -29,29 +29,23 @@ Example:
 $ gltf info test.glb
 
 File: test.glb
-Generator: SharpGLTF 1.0.0
+Generator:
 Version: 2.0
+Number of meshes: 1
+Number of primitives: 1
 Primitive type: TRIANGLES
-Vertex accessors: POSITION,NORMAL,_CUSTOM_1,COLOR_0,TEXCOORD_0
-Vertex accessor: POSITION
-4373.1924, 5522.678, -359.8238
-4370.978, 5522.723, -359.89185
-4364.6157, 5511.5107, -359.08923
+Vertex accessors: NORMAL,POSITION,_BATCHID
+Number of triangles: 2631
 Vertex accessor: NORMAL
-0.57735026, 0.57735026, 0.57735026
-0.57735026, 0.57735026, 0.57735026
-0.57735026, 0.57735026, 0.57735026
-Vertex accessor: _CUSTOM_1
-100
-101
-102
-Vertex accessor: COLOR_0
-1,1, 1, 1
-1,1, 1, 1
-1,1, 1, 1
-Vertex accessor: TEXCOORD_0
-texcoord_0
-0, 0
-0, 0
-0, 0
+Vertex accessor: POSITION
+Vertex accessor: _BATCHID
+Custom vertex attribute: _BATCHID
+Number of scalars of _BATCHID: 7893
+Distinct scalar values of _BATCHID: 0,1
+```
+
+To print the positions and normals add 'showPositions' to the command:
+
+```
+$ gltf info test.glb
 ```
