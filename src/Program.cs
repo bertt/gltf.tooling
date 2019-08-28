@@ -1,6 +1,7 @@
 ﻿using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace gltf.tooling
@@ -9,6 +10,7 @@ namespace gltf.tooling
     {
         static void Main(string[] args)
         {
+            bool showPositions = false;
             if (args.Length == 0)
             {
                 var versionString = Assembly.GetEntryAssembly()
@@ -25,11 +27,15 @@ namespace gltf.tooling
 
             if (args[0] == "info")
             {
-                Info(args[1]);
+                if(args.Length == 3 && args[2] == "showPositions")
+                {
+                    showPositions = true;
+                }
+                Info(args[1], showPositions);
             }
         }
 
-        private static void Info(string file)
+        private static void Info(string file, bool showPositions)
         {
             Console.WriteLine("File: " + file);
 
@@ -39,7 +45,7 @@ namespace gltf.tooling
                 Console.WriteLine("Generator: " + model.Asset.Generator);
                 Console.WriteLine("Version: " + model.Asset.Version);
 
-                HandleModel(model);
+                HandleModel(model, showPositions);
             }
             catch(LinkException e)
             {
@@ -48,7 +54,7 @@ namespace gltf.tooling
 
         }
 
-        private static void HandleModel(ModelRoot model)
+        private static void HandleModel(ModelRoot model, bool showPositions)
         {
             Console.WriteLine("Number of meshes: " + model.LogicalMeshes.Count);
             foreach (var mesh in model.LogicalMeshes)
@@ -73,10 +79,13 @@ namespace gltf.tooling
 
                         if (vertexAccessor.Key == "POSITION" || vertexAccessor.Key == "NORMAL")
                         {
-                            var vectors = va.AsVector3Array();
-                            foreach (var v in vectors)
+                            if (showPositions)
                             {
-                                Console.WriteLine(v.X + ", " + v.Y + ", " + v.Z);
+                                var vectors = va.AsVector3Array();
+                                foreach (var v in vectors)
+                                {
+                                    Console.WriteLine(v.X + ", " + v.Y + ", " + v.Z);
+                                }
                             }
                         }
                         else if (vertexAccessor.Key == "COLOR_0")
@@ -99,13 +108,12 @@ namespace gltf.tooling
 
                         else if (vertexAccessor.Key.StartsWith("_"))
                         {
-                            // custom attribute
-                            var scalars = va.AsScalarArray();
-                            foreach (var s in scalars)
-                            {
-                                Console.WriteLine(s);
-                            }
+                            Console.WriteLine("Custom vertex attribute: " + vertexAccessor.Key);
 
+                            var scalars = va.AsScalarArray();
+                            Console.WriteLine($"Number of scalars of {vertexAccessor.Key}: " + scalars.Count);
+                            var result = scalars.Distinct();
+                            Console.WriteLine($"Distinct scalar values of {vertexAccessor.Key}: {String.Join(',', result)}");
                         }
                     }
                 }
