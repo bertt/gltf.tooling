@@ -47,5 +47,5 @@ Distinct scalar values of _BATCHID: 0,1
 To print the positions and normals add 'showPositions' to the command:
 
 ```
-$ gltf info test.glb
+$ gltf info test.glb showPositions
 ```
