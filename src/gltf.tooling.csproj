@@ -6,7 +6,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>gltf</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-    <Version>0.1</Version>
+    <Version>0.1.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Bert Temme</Authors>
     <Company>Geodan</Company>
@@ -15,9 +15,9 @@
     <RepositoryUrl>https://github.com/bertt/gltf.tooling</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Tooling for info on gltf file</Description>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <PackageReleaseNotes>add error handling loading model</PackageReleaseNotes>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
+    <FileVersion>0.1.1.0</FileVersion>
 
   </PropertyGroup>
 
